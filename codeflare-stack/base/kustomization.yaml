@@ -3,7 +3,11 @@ kind: Kustomization
 
 configMapGenerator:
 - name: codeflare-stack-config
-  env: params.env
+  envs:
+    - params.env
+configurations:
+  - params.yaml
+
 generatorOptions:
   disableNameSuffixHash: true
 
@@ -14,7 +18,7 @@ vars:
     name: codeflare-stack-config
     apiVersion: v1
   fieldref:
-    fieldpath: subjects.namespace
+    fieldpath: data.namespace
 
 resources:
 - codeflare-notebook-imagestream.yaml
