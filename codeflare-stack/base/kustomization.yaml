@@ -1,0 +1,23 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+configMapGenerator:
+- name: codeflare-stack-config
+  env: params.env
+generatorOptions:
+  disableNameSuffixHash: true
+
+vars:
+- name: namespace
+  objref:
+    kind: ConfigMap
+    name: codeflare-stack-config
+    apiVersion: v1
+  fieldref:
+    fieldpath: subjects.namespace
+
+resources:
+- codeflare-notebook-imagestream.yaml
+- instascale.yaml
+- mcad.yaml
+- ../rbac

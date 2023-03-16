@@ -19,10 +19,6 @@ This Quick Start guide assumes that you have administrator access to an OpenShif
 
 If you want to run GPU enabled workloads, you will need to install the [Node Feature Discovery Operator](https://github.com/openshift/cluster-nfd-operator) and the [NVIDIA GPU Operator](https://github.com/NVIDIA/gpu-operator) from the OperatorHub. 
 
-### Helm
-
-We also assume that you have Helm 3 installed in your working environment. You can find instructions to install it [here](https://helm.sh/docs/intro/install/).   
-
 
 ## Clone the demo code
 
@@ -33,36 +29,12 @@ git clone https://github.com/project-codeflare/codeflare-sdk
 cd codeflare-sdk
 ```
 
-## Install the CodeFlare Stack
+## Install the CodeFlare Operator
 
-Fist we will use [Helm](https://helm.sh/) to install MCAD. (Make sure you have Helm 3 or above).
+First, install the CodeFlare operator from the opereatorhub. We will leave the settings as default
+Then create the kfdef in this directory.
 
-```bash
-# MCAD
-git clone https://github.com/project-codeflare/multi-cluster-app-dispatcher.git 
-helm list -n kube-system
-cd multi-cluster-app-dispatcher/deployment/mcad-controller/
-helm upgrade --install --wait mcad . --namespace kube-system --set loglevel=4 --set image.repository=quay.io/project-codeflare/mcad-controller --set image.tag=main-v1.29.50 --set image.pullPolicy=Always --set configMap.name=mcad-controller-configmap --set configMap.quotaEnabled='"false"' --set coscheduler.rbac.apiGroup="scheduling.sigs.k8s.io" --set coscheduler.rbac.resource="podgroups"
-cd ../../..
-rm -rf multi-cluster-app-dispatcher
-```
 
-Then we will install Instascale. 
-
-_Note_: Instascale is intended for public cloud environments where it is possible to provision additional resources on demand. You can **skip installing Instascale** if you do not anticipate dynamically scaling up or down your OpenShift cluster.  
-
-```bash
-# Instascale
-git clone https://github.com/project-codeflare/instascale.git
-cd instascale/deployment/
-oc apply -f instascale-configmap.yaml
-oc apply -f instascale-sa.yaml
-oc apply -f instascale-clusterrole.yaml
-oc apply -f instascale-clusterrolebinding.yaml
-oc apply -f deployment.yaml
-cd ../..
-rm -rf instascale
-```
 Next, let's install the KubeRay Operator to manage our Ray clusters. This will also use Helm (Helm 3 or greater).
 
 ```bash
